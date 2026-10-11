@@ -1,0 +1,621 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ImageTools - Free Online Image Tools | Compress, Resize, Convert, Crop & PDF</title>
+    <meta name="description" content="Fast, 100% free, and private in-browser image tools: compress without quality loss, resize, crop, convert formats (JPG, PNG, WEBP), and create multi-page PDFs. No registration required.">
+    <meta name="keywords" content="image compressor, resize image, convert jpg to png, crop image online, image to pdf, online image tools, free photo editor">
+
+    <!-- Bootstrap 5.3 -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome 6 -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- ImageTools Design System -->
+    <link rel="stylesheet" href="assets/css/main.css">
+
+    <style>
+        /* Homepage specific micro-interactions */
+        .interactive-preview-box {
+            position: relative;
+            border-radius: var(--radius-lg);
+            overflow: hidden;
+            background: var(--bg-surface-elevated);
+            border: 1px solid var(--border-color);
+            box-shadow: var(--shadow-xl), var(--shadow-glow);
+        }
+
+        .before-after-tag {
+            position: absolute;
+            top: 1rem;
+            padding: 0.25rem 0.75rem;
+            font-size: 0.75rem;
+            font-weight: 700;
+            letter-spacing: 0.05em;
+            border-radius: var(--radius-pill);
+            color: #fff;
+            z-index: 2;
+        }
+
+        .before-tag {
+            left: 1rem;
+            background: rgba(15, 23, 42, 0.75);
+            backdrop-filter: blur(8px);
+        }
+
+        .after-tag {
+            right: 1rem;
+            background: var(--brand-success);
+            box-shadow: 0 2px 10px rgba(16, 185, 129, 0.4);
+        }
+
+        .preview-graphic-demo {
+            height: 280px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, rgba(79, 70, 229, 0.08) 0%, rgba(6, 182, 212, 0.12) 100%);
+            position: relative;
+        }
+
+        .floating-tool-pill {
+            position: absolute;
+            background: var(--bg-surface);
+            border: 1px solid var(--border-color);
+            padding: 0.5rem 1rem;
+            border-radius: var(--radius-pill);
+            box-shadow: var(--shadow-md);
+            font-size: 0.85rem;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            animation: float 4s ease-in-out infinite alternate;
+        }
+
+        @keyframes float {
+            0% { transform: translateY(0px); }
+            100% { transform: translateY(-10px); }
+        }
+
+        .pill-1 { top: 20%; left: 8%; animation-delay: 0s; }
+        .pill-2 { bottom: 20%; right: 8%; animation-delay: 1.5s; }
+
+        .stat-card {
+            background: var(--bg-surface);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-md);
+            padding: 1.25rem;
+            text-align: center;
+            box-shadow: var(--shadow-xs);
+        }
+
+        .stat-card-number {
+            font-family: var(--font-heading);
+            font-size: 2rem;
+            font-weight: 800;
+            color: var(--brand-primary);
+            line-height: 1;
+            margin-bottom: 0.25rem;
+        }
+
+        .stat-card-label {
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: var(--text-secondary);
+        }
+
+        .steps-card {
+            background: var(--bg-surface);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-lg);
+            padding: 2.2rem 1.8rem;
+            position: relative;
+            height: 100%;
+            transition: all var(--transition-smooth);
+        }
+
+        .steps-card:hover {
+            transform: translateY(-4px);
+            border-color: var(--brand-primary);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .steps-number {
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            background: var(--brand-gradient);
+            color: #fff;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-family: var(--font-heading);
+            font-size: 1.25rem;
+            font-weight: 800;
+            margin-bottom: 1.25rem;
+            box-shadow: 0 4px 12px rgba(79, 70, 229, 0.3);
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Header Navigation -->
+    <header class="sticky-top">
+        <nav class="navbar navbar-expand-lg">
+            <div class="container">
+                <a class="navbar-brand" href="index.html">
+                    <span class="brand-icon"><i class="fas fa-layer-group"></i></span>
+                    <span>Image<span class="text-gradient">Tools</span></span>
+                </a>
+                <button class="navbar-toggler border-0 shadow-none" type="button" data-bs-toggle="collapse" data-bs-target="#mainNav" aria-controls="mainNav" aria-expanded="false" aria-label="Toggle navigation">
+                    <i class="fas fa-bars text-secondary fs-4"></i>
+                </button>
+                <div class="collapse navbar-collapse" id="mainNav">
+                    <ul class="navbar-nav mx-auto gap-lg-1">
+                        <li class="nav-item">
+                            <a class="nav-link active" href="index.html">Home</a>
+                        </li>
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" id="toolsDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                All Tools
+                            </a>
+                            <ul class="dropdown-menu" aria-labelledby="toolsDropdown">
+                                <li><a class="dropdown-item" href="compress.html"><i class="fas fa-compress-alt"></i> Image Compressor</a></li>
+                                <li><a class="dropdown-item" href="resizer.html"><i class="fas fa-expand-arrows-alt"></i> Image Resizer</a></li>
+                                <li><a class="dropdown-item" href="my_converter.html"><i class="fas fa-exchange-alt"></i> Image Converter</a></li>
+                                <li><a class="dropdown-item" href="my_crop.html"><i class="fas fa-crop-alt"></i> Image Cropper</a></li>
+                                <li><a class="dropdown-item" href="image_pdf.html"><i class="fas fa-file-pdf"></i> Images to PDF</a></li>
+                            </ul>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="about.html">About</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="contact.html">Contact</a>
+                        </li>
+                    </ul>
+                    <div class="d-flex align-items-center gap-2 mt-3 mt-lg-0">
+                        <button class="theme-toggle-btn" aria-label="Toggle theme" title="Toggle dark/light mode">
+                            <i class="fas fa-moon"></i>
+                        </button>
+                        <a href="#tools" class="btn btn-nav-action">
+                            <i class="fas fa-bolt me-1"></i> Explore Tools
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="container">
+            <div class="row align-items-center g-5">
+                <div class="col-lg-6">
+                    <div class="hero-pill">
+                        <i class="fas fa-sparkles"></i> 100% Free • In-Browser Processing
+                    </div>
+                    <h1>Transform Your Images in <span class="text-gradient">Seconds</span></h1>
+                    <p class="lead">
+                        High-performance, private, client-side tools to compress, resize, crop, convert formats, and create PDFs. Zero file uploads to external servers.
+                    </p>
+                    <div class="d-flex flex-wrap gap-3">
+                        <a href="#tools" class="btn btn-primary-action btn-lg">
+                            <i class="fas fa-wand-magic-sparkles"></i> Start Using Tools
+                        </a>
+                        <a href="#howItWorks" class="btn btn-secondary-action btn-lg">
+                            <i class="fas fa-circle-play"></i> How It Works
+                        </a>
+                    </div>
+                    <div class="hero-badges">
+                        <div class="hero-badge-item">
+                            <i class="fas fa-check-circle"></i> 100% Free Forever
+                        </div>
+                        <div class="hero-badge-item">
+                            <i class="fas fa-shield-halved"></i> Zero Server Uploads
+                        </div>
+                        <div class="hero-badge-item">
+                            <i class="fas fa-ban"></i> No Watermarks
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-6">
+                    <div class="hero-visual">
+                        <div class="interactive-preview-box">
+                            <span class="before-after-tag before-tag"><i class="fas fa-file-image me-1"></i> 4.8 MB Original</span>
+                            <span class="before-after-tag after-tag"><i class="fas fa-bolt me-1"></i> 640 KB (-87%)</span>
+                            
+                            <div class="preview-graphic-demo">
+                                <div class="floating-tool-pill pill-1">
+                                    <i class="fas fa-compress-alt text-primary"></i> Smart Lossless Engine
+                                </div>
+                                <div class="floating-tool-pill pill-2">
+                                    <i class="fas fa-shield-check text-success"></i> Local Browser Sandbox
+                                </div>
+                                <div class="text-center p-4">
+                                    <div class="brand-icon mb-3 mx-auto" style="width: 72px; height: 72px; font-size: 2rem;">
+                                        <i class="fas fa-sliders"></i>
+                                    </div>
+                                    <h4 class="fw-bold mb-1">Instant Client-Side Power</h4>
+                                    <p class="small text-secondary mb-0">Drag, customize, and save in ultra-high quality</p>
+                                </div>
+                            </div>
+
+                            <div class="p-3 bg-surface border-top border-subtle">
+                                <div class="row g-2">
+                                    <div class="col-4">
+                                        <div class="stat-card">
+                                            <div class="stat-card-number">5+</div>
+                                            <div class="stat-card-label">Pro Tools</div>
+                                        </div>
+                                    </div>
+                                    <div class="col-4">
+                                        <div class="stat-card">
+                                            <div class="stat-card-number">0ms</div>
+                                            <div class="stat-card-label">Upload Delay</div>
+                                        </div>
+                                    </div>
+                                    <div class="col-4">
+                                        <div class="stat-card">
+                                            <div class="stat-card-number">100%</div>
+                                            <div class="stat-card-label">Private</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Top AdSense Banner -->
+    <section class="container">
+        <div class="ad-section">
+            <!-- ADSENSE_TOP -->
+            <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-xxxxxxxxxx" crossorigin="anonymous"></script>
+            <ins class="adsbygoogle"
+                style="display:block"
+                data-ad-client="ca-pub-xxxxxxxxxx"
+                data-ad-slot="1234567890"
+                data-ad-format="auto"
+                data-full-width-responsive="true"></ins>
+            <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+        </div>
+    </section>
+
+    <!-- Tools Directory -->
+    <section class="tools-section" id="tools">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-tag">Essential Suite</span>
+                <h2>Choose a Tool to Get Started</h2>
+                <p>Everything you need to optimize, format, and style images in one clean place.</p>
+            </div>
+            
+            <div class="row g-4">
+                <!-- Tool 1: Compressor -->
+                <div class="col-md-6 col-lg-4">
+                    <div class="tool-card">
+                        <div class="tool-card-icon">
+                            <i class="fas fa-compress-alt"></i>
+                        </div>
+                        <h3>Image Compressor</h3>
+                        <p>Dramatically reduce JPG, PNG, and WEBP image file sizes without noticeable visual degradation. Perfect for websites and sharing.</p>
+                        <a href="compress.html" class="tool-action">
+                            Open Compressor <i class="fas fa-arrow-right"></i>
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Tool 2: Resizer -->
+                <div class="col-md-6 col-lg-4">
+                    <div class="tool-card">
+                        <div class="tool-card-icon">
+                            <i class="fas fa-expand-arrows-alt"></i>
+                        </div>
+                        <h3>Image Resizer</h3>
+                        <p>Change pixel dimensions and scale images up or down while maintaining exact aspect ratios with real-time preview.</p>
+                        <a href="resizer.html" class="tool-action">
+                            Open Resizer <i class="fas fa-arrow-right"></i>
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Tool 3: Converter -->
+                <div class="col-md-6 col-lg-4">
+                    <div class="tool-card">
+                        <div class="tool-card-icon">
+                            <i class="fas fa-exchange-alt"></i>
+                        </div>
+                        <h3>Image Converter</h3>
+                        <p>Easily convert images between JPG, PNG, WEBP, and GIF formats right inside your web browser in milliseconds.</p>
+                        <a href="my_converter.html" class="tool-action">
+                            Open Converter <i class="fas fa-arrow-right"></i>
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Tool 4: Cropper -->
+                <div class="col-md-6 col-lg-4">
+                    <div class="tool-card">
+                        <div class="tool-card-icon">
+                            <i class="fas fa-crop-alt"></i>
+                        </div>
+                        <h3>Image Cropper</h3>
+                        <p>Interactive crop box with popular aspect ratio presets (1:1, 4:3, 16:9, and freeform) to frame your images with pixel precision.</p>
+                        <a href="my_crop.html" class="tool-action">
+                            Open Cropper <i class="fas fa-arrow-right"></i>
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Tool 5: Image to PDF -->
+                <div class="col-md-6 col-lg-4">
+                    <div class="tool-card">
+                        <div class="tool-card-icon">
+                            <i class="fas fa-file-pdf"></i>
+                        </div>
+                        <h3>Images to PDF</h3>
+                        <p>Combine one or multiple images into a professional, multi-page PDF document. Rearrange pages easily with drag-and-drop.</p>
+                        <a href="image_pdf.html" class="tool-action">
+                            Open PDF Tool <i class="fas fa-arrow-right"></i>
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Feature highlight box -->
+                <div class="col-md-6 col-lg-4">
+                    <div class="tool-card bg-primary-subtle border-primary-subtle" style="background: var(--brand-gradient-subtle);">
+                        <div class="tool-card-icon" style="background: var(--brand-gradient); color: #fff;">
+                            <i class="fas fa-shield-heart"></i>
+                        </div>
+                        <h3>Privacy Guaranteed</h3>
+                        <p>Because files are processed directly on your machine with Web Workers and HTML5 Canvas, your private photos never leave your device.</p>
+                        <a href="about.html" class="tool-action">
+                            Learn About Security <i class="fas fa-arrow-right"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- How It Works Section -->
+    <section class="features-section" id="howItWorks">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-tag">Simple Process</span>
+                <h2>How It Works in 3 Steps</h2>
+                <p>No account required, no waiting queues, no software to download.</p>
+            </div>
+            
+            <div class="row g-4">
+                <div class="col-md-4">
+                    <div class="steps-card">
+                        <div class="steps-number">1</div>
+                        <h3>Select or Drop Image</h3>
+                        <p>Choose an image from your device or drop it directly into our dropzone. Supports JPG, PNG, WEBP, and more.</p>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="steps-card">
+                        <div class="steps-number">2</div>
+                        <h3>Fine-tune Settings</h3>
+                        <p>Adjust compression levels, choose target dimensions, crop boundaries, or select your desired output format.</p>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="steps-card">
+                        <div class="steps-number">3</div>
+                        <h3>Instant Download</h3>
+                        <p>Preview the result with before/after statistics and download your optimized image clean with zero watermarks.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Why Choose Us Features Grid -->
+    <section class="tools-section">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-tag">Core Advantages</span>
+                <h2>Engineered for Speed & Quality</h2>
+                <p>We built ImageTools to be the cleanest, fastest utility in your workflow.</p>
+            </div>
+
+            <div class="row g-4">
+                <div class="col-md-6 col-lg-3">
+                    <div class="feature-box">
+                        <div class="feature-icon-wrapper">
+                            <i class="fas fa-bolt"></i>
+                        </div>
+                        <h3>Lightning Fast</h3>
+                        <p>Executed natively in your browser using multi-threaded web workers for instantaneous results.</p>
+                    </div>
+                </div>
+                <div class="col-md-6 col-lg-3">
+                    <div class="feature-box">
+                        <div class="feature-icon-wrapper">
+                            <i class="fas fa-lock"></i>
+                        </div>
+                        <h3>Strict Privacy</h3>
+                        <p>Images are never sent across the internet to third-party cloud servers. 100% on-device processing.</p>
+                    </div>
+                </div>
+                <div class="col-md-6 col-lg-3">
+                    <div class="feature-box">
+                        <div class="feature-icon-wrapper">
+                            <i class="fas fa-stamp"></i>
+                        </div>
+                        <h3>Clean Exports</h3>
+                        <p>No branding, no forced watermarks, and no downscaling caps. Professional quality every single time.</p>
+                    </div>
+                </div>
+                <div class="col-md-6 col-lg-3">
+                    <div class="feature-box">
+                        <div class="feature-icon-wrapper">
+                            <i class="fas fa-mobile-screen"></i>
+                        </div>
+                        <h3>Fully Responsive</h3>
+                        <p>Enjoy the exact same sleek, intuitive experience on desktops, tablets, and smartphones alike.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- FAQ Section -->
+    <section class="features-section">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-tag">Got Questions?</span>
+                <h2>Frequently Asked Questions</h2>
+                <p>Everything you need to know about our free tools and data security.</p>
+            </div>
+
+            <div class="row justify-content-center">
+                <div class="col-lg-9">
+                    <div class="accordion" id="faqAccordion">
+                        <div class="accordion-item">
+                            <h2 class="accordion-header" id="headingOne">
+                                <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                                    Are these tools really 100% free with no limits?
+                                </button>
+                            </h2>
+                            <div id="collapseOne" class="accordion-collapse collapse show" aria-labelledby="headingOne" data-bs-parent="#faqAccordion">
+                                <div class="accordion-body">
+                                    Yes! All tools on ImageTools are completely free with no usage limits, hidden fees, or premium subscriptions required. You can process as many images as you need.
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="accordion-item">
+                            <h2 class="accordion-header" id="headingTwo">
+                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+                                    Do you upload or save my images on any server?
+                                </button>
+                            </h2>
+                            <div id="collapseTwo" class="accordion-collapse collapse" aria-labelledby="headingTwo" data-bs-parent="#faqAccordion">
+                                <div class="accordion-body">
+                                    No. Your privacy is our highest priority. All image compression, resizing, cropping, and conversion happens entirely within your web browser using HTML5 Canvas and modern JavaScript libraries. Your files never travel across the internet.
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="accordion-item">
+                            <h2 class="accordion-header" id="headingThree">
+                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
+                                    Does image compression degrade the visual quality?
+                                </button>
+                            </h2>
+                            <div id="collapseThree" class="accordion-collapse collapse" aria-labelledby="headingThree" data-bs-parent="#faqAccordion">
+                                <div class="accordion-body">
+                                    Our compressor uses intelligent lossy and lossless algorithms designed to strip unnecessary metadata and optimize color tables, preserving crisp clarity while reducing file size by up to 80%.
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="accordion-item">
+                            <h2 class="accordion-header" id="headingFour">
+                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseFour" aria-expanded="false" aria-controls="collapseFour">
+                                    Which image formats are supported?
+                                </button>
+                            </h2>
+                            <div id="collapseFour" class="accordion-collapse collapse" aria-labelledby="headingFour" data-bs-parent="#faqAccordion">
+                                <div class="accordion-body">
+                                    We support all standard web formats, including JPG/JPEG, PNG, WEBP, and GIF, with high-definition multi-page PDF generation.
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Bottom AdSense Banner -->
+    <section class="container">
+        <div class="ad-section">
+            <!-- ADSENSE_BOTTOM -->
+            <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-xxxxxxxxxx" crossorigin="anonymous"></script>
+            <ins class="adsbygoogle"
+                style="display:block"
+                data-ad-client="ca-pub-xxxxxxxxxx"
+                data-ad-slot="3456789012"
+                data-ad-format="auto"
+                data-full-width-responsive="true"></ins>
+            <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="row g-4">
+                <div class="col-lg-4">
+                    <a class="navbar-brand text-white mb-3" href="index.html">
+                        <span class="brand-icon"><i class="fas fa-layer-group"></i></span>
+                        <span class="text-white">Image<span class="text-gradient">Tools</span></span>
+                    </a>
+                    <p class="text-secondary small mt-2 pe-lg-4">
+                        Free, private, high-performance image processing right inside your web browser. No registration, no watermarks, no server uploads.
+                    </p>
+                    <div class="d-flex align-items-center mt-3">
+                        <a href="#" class="footer-social-link" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#" class="footer-social-link" aria-label="Twitter"><i class="fab fa-twitter"></i></a>
+                        <a href="#" class="footer-social-link" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+                        <a href="#" class="footer-social-link" aria-label="GitHub"><i class="fab fa-github"></i></a>
+                    </div>
+                </div>
+                <div class="col-6 col-lg-2">
+                    <h5>Tools</h5>
+                    <ul class="footer-links">
+                        <li><a href="compress.html">Image Compressor</a></li>
+                        <li><a href="resizer.html">Image Resizer</a></li>
+                        <li><a href="my_converter.html">Image Converter</a></li>
+                        <li><a href="my_crop.html">Image Cropper</a></li>
+                        <li><a href="image_pdf.html">Images to PDF</a></li>
+                    </ul>
+                </div>
+                <div class="col-6 col-lg-2">
+                    <h5>Company</h5>
+                    <ul class="footer-links">
+                        <li><a href="about.html">About Us</a></li>
+                        <li><a href="contact.html">Contact Support</a></li>
+                        <li><a href="privacy.html">Privacy Policy</a></li>
+                        <li><a href="privacy.html">Terms of Service</a></li>
+                    </ul>
+                </div>
+                <div class="col-lg-4">
+                    <h5>Security & Compliance</h5>
+                    <p class="small text-secondary mb-3">
+                        <i class="fas fa-shield-halved text-success me-1"></i> Client-Side Sandbox: Your pictures are rendered directly into HTML5 memory buffers and never written to our disks.
+                    </p>
+                    <div class="stat-pill success">
+                        <i class="fas fa-check-circle"></i> 100% GDPR & Privacy Friendly
+                    </div>
+                </div>
+            </div>
+
+            <div class="footer-bottom">
+                <p class="mb-0">&copy; 2025 ImageTools. All rights reserved.</p>
+                <p class="mb-0">Designed for creators, designers, and developers.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Back to Top Button -->
+    <button class="back-to-top-btn" id="backToTopBtn" aria-label="Back to top">
+        <i class="fas fa-arrow-up"></i>
+    </button>
+
+    <!-- Bootstrap Bundle JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- ImageTools Core App JS -->
+    <script src="assets/js/app.js"></script>
+</body>
+</html>

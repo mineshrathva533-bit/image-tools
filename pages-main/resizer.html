@@ -1,0 +1,535 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Free Online Image Resizer – Resize Image Dimensions Fast & Privately</title>
+    <meta name="description" content="Resize JPG, PNG, and WEBP images by custom pixel width and height. Lock aspect ratio, preview in real time, and download with zero quality distortion.">
+    <meta name="keywords" content="image resizer, resize image online, change image dimensions, scale picture, crop resize photo">
+
+    <!-- Bootstrap 5.3 -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome 6 -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- ImageTools Design System -->
+    <link rel="stylesheet" href="assets/css/main.css">
+
+    <style>
+        .dimension-group {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .dimension-unit-badge {
+            background: var(--bg-surface-subtle);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-md);
+            padding: 0.75rem 1rem;
+            font-weight: 700;
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+        }
+
+        .aspect-lock-pill {
+            background: var(--bg-surface-subtle);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-pill);
+            padding: 0.5rem 1rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 0.9rem;
+            user-select: none;
+            transition: all var(--transition-fast);
+        }
+
+        .aspect-lock-pill:hover {
+            border-color: var(--brand-primary);
+            background: var(--brand-gradient-subtle);
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Header Navigation -->
+    <header class="sticky-top">
+        <nav class="navbar navbar-expand-lg">
+            <div class="container">
+                <a class="navbar-brand" href="index.html">
+                    <span class="brand-icon"><i class="fas fa-layer-group"></i></span>
+                    <span>Image<span class="text-gradient">Tools</span></span>
+                </a>
+                <button class="navbar-toggler border-0 shadow-none" type="button" data-bs-toggle="collapse" data-bs-target="#mainNav" aria-controls="mainNav" aria-expanded="false" aria-label="Toggle navigation">
+                    <i class="fas fa-bars text-secondary fs-4"></i>
+                </button>
+                <div class="collapse navbar-collapse" id="mainNav">
+                    <ul class="navbar-nav mx-auto gap-lg-1">
+                        <li class="nav-item">
+                            <a class="nav-link" href="index.html">Home</a>
+                        </li>
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle active" href="#" id="toolsDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                All Tools
+                            </a>
+                            <ul class="dropdown-menu" aria-labelledby="toolsDropdown">
+                                <li><a class="dropdown-item" href="compress.html"><i class="fas fa-compress-alt"></i> Image Compressor</a></li>
+                                <li><a class="dropdown-item active" href="resizer.html"><i class="fas fa-expand-arrows-alt"></i> Image Resizer</a></li>
+                                <li><a class="dropdown-item" href="my_converter.html"><i class="fas fa-exchange-alt"></i> Image Converter</a></li>
+                                <li><a class="dropdown-item" href="my_crop.html"><i class="fas fa-crop-alt"></i> Image Cropper</a></li>
+                                <li><a class="dropdown-item" href="image_pdf.html"><i class="fas fa-file-pdf"></i> Images to PDF</a></li>
+                            </ul>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="about.html">About</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="contact.html">Contact</a>
+                        </li>
+                    </ul>
+                    <div class="d-flex align-items-center gap-2 mt-3 mt-lg-0">
+                        <button class="theme-toggle-btn" aria-label="Toggle theme" title="Toggle dark/light mode">
+                            <i class="fas fa-moon"></i>
+                        </button>
+                        <a href="index.html#tools" class="btn btn-nav-action">
+                            <i class="fas fa-bolt me-1"></i> More Tools
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <!-- Tool Workspace -->
+    <main class="tool-workspace">
+        <div class="container">
+            <div class="tool-workspace-header">
+                <span class="section-tag mb-2 d-inline-block">Precision Scaling</span>
+                <h1>Image <span class="text-gradient">Resizer</span></h1>
+                <p>Change image width and height with pixel accuracy. Maintain aspect ratios or stretch dimensions to fit any social media or web canvas.</p>
+            </div>
+
+            <!-- Upload Area -->
+            <div class="upload-container" id="uploadContainer">
+                <input type="file" id="fileInput" accept="image/jpeg,image/png,image/webp" class="d-none">
+                <div class="upload-icon-wrapper">
+                    <i class="fas fa-expand-arrows-alt"></i>
+                </div>
+                <div class="upload-title">Drop your image to resize, or browse</div>
+                <div class="upload-subtitle">Supports JPG, PNG, and WEBP formats</div>
+                <div class="upload-pills">
+                    <span class="upload-pill">JPG</span>
+                    <span class="upload-pill">PNG</span>
+                    <span class="upload-pill">WEBP</span>
+                    <span class="upload-pill">PRESERVE RATIO</span>
+                </div>
+                <div class="upload-privacy-tag">
+                    <i class="fas fa-shield-halved"></i> 100% Private • Processed locally in browser
+                </div>
+            </div>
+
+            <!-- Top AdSense Banner -->
+            <div class="ad-section">
+                <!-- ADSENSE_TOP -->
+                <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-xxxxxxxxxx" crossorigin="anonymous"></script>
+                <ins class="adsbygoogle"
+                    style="display:block"
+                    data-ad-client="ca-pub-xxxxxxxxxx"
+                    data-ad-slot="1234567890"
+                    data-ad-format="auto"
+                    data-full-width-responsive="true"></ins>
+                <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+            </div>
+
+            <!-- Preview & Controls Section (hidden by default) -->
+            <div id="previewSection" style="display: none;" class="mb-5">
+                <!-- Resizing Controls Card -->
+                <div class="controls-card">
+                    <div class="controls-card-title">
+                        <i class="fas fa-ruler-combined"></i>
+                        <span>Dimensions & Scaling</span>
+                        <span class="ms-auto stat-pill">
+                            <i class="fas fa-file-image text-primary"></i> <span id="fileName">image.jpg</span>
+                        </span>
+                    </div>
+
+                    <div class="row g-4 align-items-center">
+                        <div class="col-md-5">
+                            <label for="widthInput" class="form-label">Width (px)</label>
+                            <div class="input-group">
+                                <span class="input-group-text bg-surface-subtle text-secondary"><i class="fas fa-arrows-left-right"></i></span>
+                                <input type="number" class="form-control" id="widthInput" placeholder="Width" min="1">
+                                <span class="input-group-text bg-surface-subtle text-secondary">px</span>
+                            </div>
+                        </div>
+
+                        <div class="col-md-2 text-center pt-md-4">
+                            <label class="aspect-lock-pill" for="lockAspect">
+                                <input class="form-check-input mt-0" type="checkbox" id="lockAspect" checked>
+                                <span class="small"><i class="fas fa-link text-primary me-1"></i> Lock Ratio</span>
+                            </label>
+                        </div>
+
+                        <div class="col-md-5">
+                            <label for="heightInput" class="form-label">Height (px)</label>
+                            <div class="input-group">
+                                <span class="input-group-text bg-surface-subtle text-secondary"><i class="fas fa-arrows-up-down"></i></span>
+                                <input type="number" class="form-control" id="heightInput" placeholder="Height" min="1">
+                                <span class="input-group-text bg-surface-subtle text-secondary">px</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="text-center mt-4 pt-3 border-top border-subtle">
+                        <button class="btn btn-primary-action px-5" id="resizeBtn">
+                            <i class="fas fa-expand-alt"></i> Apply Resize
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Side-by-side Preview Cards -->
+                <div class="row g-4 mt-2">
+                    <!-- Original Image Card -->
+                    <div class="col-md-6">
+                        <div class="preview-card">
+                            <div class="preview-card-header">
+                                <h4><i class="fas fa-image text-secondary"></i> Original Source</h4>
+                                <div class="d-flex gap-2">
+                                    <span class="stat-pill">
+                                        <i class="fas fa-vector-square"></i> <span id="originalInfo">0 × 0 px</span>
+                                    </span>
+                                    <span class="stat-pill">
+                                        <i class="fas fa-weight-hanging"></i> <span id="originalSize">0 KB</span>
+                                    </span>
+                                </div>
+                            </div>
+                            <div class="preview-img-container">
+                                <img id="originalPreview" src="" alt="Original Preview">
+                            </div>
+                            <div class="preview-meta-footer">
+                                <span class="text-muted small">Original resolution</span>
+                                <span class="badge bg-secondary-subtle text-secondary">Base Image</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Resized Image Card -->
+                    <div class="col-md-6">
+                        <div class="preview-card">
+                            <div class="preview-card-header">
+                                <h4><i class="fas fa-check-double text-success"></i> Resized Output</h4>
+                                <div class="d-flex gap-2">
+                                    <span class="stat-pill success">
+                                        <i class="fas fa-arrows-alt"></i> <span id="resizedInfo">0 × 0 px</span>
+                                    </span>
+                                    <span class="stat-pill">
+                                        <i class="fas fa-weight-hanging"></i> <span id="resizedSize">N/A</span>
+                                    </span>
+                                </div>
+                            </div>
+                            <div class="preview-img-container">
+                                <img id="resizedPreview" src="" alt="Resized Preview">
+                            </div>
+                            <div class="preview-meta-footer justify-content-between">
+                                <span class="text-success small fw-bold">
+                                    <i class="fas fa-check-circle"></i> Ready to download
+                                </span>
+                                <a class="btn btn-download-action disabled" id="downloadBtn" href="#" role="button">
+                                    <i class="fas fa-download"></i> Download Resized Image
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Features Information Cards -->
+            <div class="features-section rounded-4 mt-5">
+                <div class="container p-0">
+                    <div class="section-header mb-4">
+                        <span class="section-tag">Capabilities</span>
+                        <h2>Smart Resizing for Any Platform</h2>
+                    </div>
+                    <div class="row g-4">
+                        <div class="col-md-4">
+                            <div class="feature-box">
+                                <div class="feature-icon-wrapper">
+                                    <i class="fas fa-link"></i>
+                                </div>
+                                <h3>Proportional Scaling</h3>
+                                <p>Keep the original proportions intact with automated aspect lock to prevent distorted or stretched photos.</p>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="feature-box">
+                                <div class="feature-icon-wrapper">
+                                    <i class="fas fa-bullseye"></i>
+                                </div>
+                                <h3>Exact Pixel Target</h3>
+                                <p>Specify exact width or height dimensions required for banners, blog thumbnails, avatars, or ecommerce catalogs.</p>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="feature-box">
+                                <div class="feature-icon-wrapper">
+                                    <i class="fas fa-shield-halved"></i>
+                                </div>
+                                <h3>Instant & Confidential</h3>
+                                <p>Resizing calculations take place on your device using hardware-accelerated canvas. Zero server uploads.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </main>
+
+    <!-- Bottom AdSense Banner -->
+    <div class="container">
+        <div class="ad-section">
+            <!-- ADSENSE_BOTTOM -->
+            <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-xxxxxxxxxx" crossorigin="anonymous"></script>
+            <ins class="adsbygoogle"
+                style="display:block"
+                data-ad-client="ca-pub-xxxxxxxxxx"
+                data-ad-slot="3456789012"
+                data-ad-format="auto"
+                data-full-width-responsive="true"></ins>
+            <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="row g-4">
+                <div class="col-lg-4">
+                    <a class="navbar-brand text-white mb-3" href="index.html">
+                        <span class="brand-icon"><i class="fas fa-layer-group"></i></span>
+                        <span class="text-white">Image<span class="text-gradient">Tools</span></span>
+                    </a>
+                    <p class="text-secondary small mt-2 pe-lg-4">
+                        Free, private, high-performance image processing right inside your web browser. No registration, no watermarks, no server uploads.
+                    </p>
+                    <div class="d-flex align-items-center mt-3">
+                        <a href="#" class="footer-social-link" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#" class="footer-social-link" aria-label="Twitter"><i class="fab fa-twitter"></i></a>
+                        <a href="#" class="footer-social-link" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+                        <a href="#" class="footer-social-link" aria-label="GitHub"><i class="fab fa-github"></i></a>
+                    </div>
+                </div>
+                <div class="col-6 col-lg-2">
+                    <h5>Tools</h5>
+                    <ul class="footer-links">
+                        <li><a href="compress.html">Image Compressor</a></li>
+                        <li><a href="resizer.html">Image Resizer</a></li>
+                        <li><a href="my_converter.html">Image Converter</a></li>
+                        <li><a href="my_crop.html">Image Cropper</a></li>
+                        <li><a href="image_pdf.html">Images to PDF</a></li>
+                    </ul>
+                </div>
+                <div class="col-6 col-lg-2">
+                    <h5>Company</h5>
+                    <ul class="footer-links">
+                        <li><a href="about.html">About Us</a></li>
+                        <li><a href="contact.html">Contact Support</a></li>
+                        <li><a href="privacy.html">Privacy Policy</a></li>
+                    </ul>
+                </div>
+                <div class="col-lg-4">
+                    <h5>Security & Compliance</h5>
+                    <p class="small text-secondary mb-3">
+                        <i class="fas fa-shield-halved text-success me-1"></i> Client-Side Sandbox: Your pictures are rendered directly into HTML5 memory buffers and never written to our disks.
+                    </p>
+                    <div class="stat-pill success">
+                        <i class="fas fa-check-circle"></i> 100% GDPR & Privacy Friendly
+                    </div>
+                </div>
+            </div>
+
+            <div class="footer-bottom">
+                <p class="mb-0">&copy; 2025 ImageTools. All rights reserved.</p>
+                <p class="mb-0">Designed for creators, designers, and developers.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Back to Top Button -->
+    <button class="back-to-top-btn" id="backToTopBtn" aria-label="Back to top">
+        <i class="fas fa-arrow-up"></i>
+    </button>
+
+    <!-- Bootstrap Bundle JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- ImageTools Core App JS -->
+    <script src="assets/js/app.js"></script>
+
+    <!-- Resizer Core JavaScript (Exact feature preservation) -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const uploadContainer = document.getElementById('uploadContainer');
+            const fileInput = document.getElementById('fileInput');
+            const previewSection = document.getElementById('previewSection');
+            const originalPreview = document.getElementById('originalPreview');
+            const resizedPreview = document.getElementById('resizedPreview');
+            const originalInfo = document.getElementById('originalInfo');
+            const resizedInfo = document.getElementById('resizedInfo');
+            const fileNameSpan = document.getElementById('fileName');
+            const originalSizeSpan = document.getElementById('originalSize');
+            const resizedSizeSpan = document.getElementById('resizedSize');
+            const widthInput = document.getElementById('widthInput');
+            const heightInput = document.getElementById('heightInput');
+            const lockAspectCheckbox = document.getElementById('lockAspect');
+            const resizeBtn = document.getElementById('resizeBtn');
+            const downloadBtn = document.getElementById('downloadBtn');
+
+            let originalImage = null;
+            let originalFile = null;
+            let resizedBlob = null;
+
+            // Handle file upload click
+            uploadContainer.addEventListener('click', () => fileInput.click());
+
+            // Handle drag and drop
+            uploadContainer.addEventListener('dragover', (e) => {
+                e.preventDefault();
+                uploadContainer.classList.add('drag-over');
+            });
+
+            uploadContainer.addEventListener('dragleave', () => {
+                uploadContainer.classList.remove('drag-over');
+            });
+
+            uploadContainer.addEventListener('drop', (e) => {
+                e.preventDefault();
+                uploadContainer.classList.remove('drag-over');
+                if (e.dataTransfer.files.length) {
+                    handleFileSelection(e.dataTransfer.files[0]);
+                }
+            });
+
+            // Handle file selection
+            fileInput.addEventListener('change', (e) => {
+                if (e.target.files.length) {
+                    handleFileSelection(e.target.files[0]);
+                }
+            });
+
+            function handleFileSelection(file) {
+                if (!file.type.match('image/jpeg|image/png|image/webp')) {
+                    alert('Please select a JPG, PNG, or WEBP image.');
+                    return;
+                }
+
+                originalFile = file;
+
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    originalImage = new Image();
+                    originalImage.onload = function() {
+                        const { width, height } = originalImage;
+                        originalInfo.textContent = `${width} × ${height} px`;
+                        widthInput.value = width;
+                        heightInput.value = height;
+                        
+                        // Set the resized preview to the original image initially
+                        resizedPreview.src = e.target.result;
+                        resizedInfo.textContent = `${width} × ${height} px`;
+
+                        previewSection.style.display = 'block';
+                        resizeBtn.disabled = false;
+                        downloadBtn.classList.add('disabled');
+
+                        fileNameSpan.textContent = file.name;
+                        originalSizeSpan.textContent = formatFileSize(file.size);
+                        resizedSizeSpan.textContent = 'N/A';
+
+                        // Scroll smoothly to preview
+                        previewSection.scrollIntoView({ behavior: 'smooth' });
+                    };
+                    originalImage.src = e.target.result;
+                    originalPreview.src = e.target.result;
+                };
+                reader.readAsDataURL(file);
+            }
+
+            // Lock aspect ratio logic
+            function updateDimensions(changedInput) {
+                if (!originalImage || !lockAspectCheckbox.checked) return;
+
+                const newWidth = parseInt(widthInput.value);
+                const newHeight = parseInt(heightInput.value);
+
+                if (changedInput === 'width' && !isNaN(newWidth) && newWidth > 0) {
+                    heightInput.value = Math.round(newWidth / (originalImage.width / originalImage.height));
+                } else if (changedInput === 'height' && !isNaN(newHeight) && newHeight > 0) {
+                    widthInput.value = Math.round(newHeight * (originalImage.width / originalImage.height));
+                }
+            }
+
+            widthInput.addEventListener('input', () => updateDimensions('width'));
+            heightInput.addEventListener('input', () => updateDimensions('height'));
+
+            // Resize button click
+            resizeBtn.addEventListener('click', async () => {
+                if (!originalImage) return;
+
+                const newWidth = parseInt(widthInput.value);
+                const newHeight = parseInt(heightInput.value);
+
+                if (isNaN(newWidth) || isNaN(newHeight) || newWidth <= 0 || newHeight <= 0) {
+                    alert('Please enter valid dimensions (greater than 0).');
+                    return;
+                }
+
+                resizeBtn.disabled = true;
+                resizeBtn.innerHTML = '<i class="fas fa-spinner fa-spin me-2"></i> Resizing...';
+                downloadBtn.classList.add('disabled');
+                
+                try {
+                    const canvas = document.createElement('canvas');
+                    canvas.width = newWidth;
+                    canvas.height = newHeight;
+                    const ctx = canvas.getContext('2d');
+                    ctx.drawImage(originalImage, 0, 0, newWidth, newHeight);
+
+                    resizedBlob = await new Promise(resolve => canvas.toBlob(resolve, originalFile.type));
+                    const resizedDataUrl = URL.createObjectURL(resizedBlob);
+
+                    resizedPreview.src = resizedDataUrl;
+                    resizedInfo.textContent = `${newWidth} × ${newHeight} px`;
+                    resizedSizeSpan.textContent = formatFileSize(resizedBlob.size);
+                    
+                    downloadBtn.classList.remove('disabled');
+                    downloadBtn.href = resizedDataUrl;
+                    
+                    // Set the download filename
+                    const originalFileName = originalFile.name;
+                    const fileExtension = originalFileName.split('.').pop();
+                    const newFileName = `resized_${newWidth}x${newHeight}.${fileExtension}`;
+                    downloadBtn.setAttribute('download', newFileName);
+
+                } catch (error) {
+                    console.error('Resize error:', error);
+                    alert('Error resizing image. Please try again.');
+                } finally {
+                    resizeBtn.disabled = false;
+                    resizeBtn.innerHTML = '<i class="fas fa-expand-alt me-2"></i> Apply Resize';
+                }
+            });
+
+            // Format file size utility
+            function formatFileSize(bytes) {
+                if (bytes === 0) return '0 Bytes';
+                const k = 1024;
+                const sizes = ['Bytes', 'KB', 'MB'];
+                const i = Math.floor(Math.log(bytes) / Math.log(k));
+                return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
+            }
+        });
+    </script>
+</body>
+</html>

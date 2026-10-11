@@ -1,0 +1,503 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Free Online Image Cropper – Crop Photos to Custom & Social Aspect Ratios</title>
+    <meta name="description" content="Crop images online with pixel precision. Presets for 1:1, 4:3, 16:9, or freeform cropping. 100% private in-browser editor with zero watermark.">
+    <meta name="keywords" content="image cropper, crop photo online, crop image square, 16:9 crop, free photo editor crop tool">
+
+    <!-- Bootstrap 5.3 -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome 6 -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Cropper.js CSS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.12/cropper.min.css">
+    <!-- ImageTools Design System -->
+    <link rel="stylesheet" href="assets/css/main.css">
+
+    <style>
+        .cropper-stage-card {
+            background: #090d16;
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-xl);
+            overflow: hidden;
+            box-shadow: var(--shadow-xl);
+            position: relative;
+        }
+
+        .cropper-toolbar {
+            padding: 1rem 1.5rem;
+            background: var(--bg-surface);
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            justify-content: space-between;
+            gap: 1rem;
+        }
+
+        .cropper-viewport {
+            max-height: 520px;
+            min-height: 380px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: #090d16;
+            padding: 1.5rem;
+        }
+
+        .cropper-viewport img {
+            max-width: 100%;
+            display: block;
+        }
+
+        .aspect-ratio-group {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Header Navigation -->
+    <header class="sticky-top">
+        <nav class="navbar navbar-expand-lg">
+            <div class="container">
+                <a class="navbar-brand" href="index.html">
+                    <span class="brand-icon"><i class="fas fa-layer-group"></i></span>
+                    <span>Image<span class="text-gradient">Tools</span></span>
+                </a>
+                <button class="navbar-toggler border-0 shadow-none" type="button" data-bs-toggle="collapse" data-bs-target="#mainNav" aria-controls="mainNav" aria-expanded="false" aria-label="Toggle navigation">
+                    <i class="fas fa-bars text-secondary fs-4"></i>
+                </button>
+                <div class="collapse navbar-collapse" id="mainNav">
+                    <ul class="navbar-nav mx-auto gap-lg-1">
+                        <li class="nav-item">
+                            <a class="nav-link" href="index.html">Home</a>
+                        </li>
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle active" href="#" id="toolsDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                All Tools
+                            </a>
+                            <ul class="dropdown-menu" aria-labelledby="toolsDropdown">
+                                <li><a class="dropdown-item" href="compress.html"><i class="fas fa-compress-alt"></i> Image Compressor</a></li>
+                                <li><a class="dropdown-item" href="resizer.html"><i class="fas fa-expand-arrows-alt"></i> Image Resizer</a></li>
+                                <li><a class="dropdown-item" href="my_converter.html"><i class="fas fa-exchange-alt"></i> Image Converter</a></li>
+                                <li><a class="dropdown-item active" href="my_crop.html"><i class="fas fa-crop-alt"></i> Image Cropper</a></li>
+                                <li><a class="dropdown-item" href="image_pdf.html"><i class="fas fa-file-pdf"></i> Images to PDF</a></li>
+                            </ul>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="about.html">About</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="contact.html">Contact</a>
+                        </li>
+                    </ul>
+                    <div class="d-flex align-items-center gap-2 mt-3 mt-lg-0">
+                        <button class="theme-toggle-btn" aria-label="Toggle theme" title="Toggle dark/light mode">
+                            <i class="fas fa-moon"></i>
+                        </button>
+                        <a href="index.html#tools" class="btn btn-nav-action">
+                            <i class="fas fa-bolt me-1"></i> More Tools
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <!-- Tool Workspace -->
+    <main class="tool-workspace">
+        <div class="container">
+            <div class="tool-workspace-header">
+                <span class="section-tag mb-2 d-inline-block">Precision Framing</span>
+                <h1>Image <span class="text-gradient">Cropper</span></h1>
+                <p>Crop images to exact proportions for social media, avatars, or wallpapers. Interactive handles, aspect ratio presets, and instant export.</p>
+            </div>
+
+            <!-- Upload Area -->
+            <div class="upload-container" id="uploadContainer">
+                <input type="file" id="fileInput" accept="image/*" class="d-none">
+                <div class="upload-icon-wrapper">
+                    <i class="fas fa-crop-alt"></i>
+                </div>
+                <div class="upload-title">Drop your image to crop, or browse</div>
+                <div class="upload-subtitle">Supports JPG, PNG, WEBP, and GIF up to 20MB</div>
+                <div class="upload-pills">
+                    <span class="upload-pill">FREEFORM</span>
+                    <span class="upload-pill">1:1 SQUARE</span>
+                    <span class="upload-pill">4:3 STANDARD</span>
+                    <span class="upload-pill">16:9 WIDESCREEN</span>
+                </div>
+                <div class="upload-privacy-tag">
+                    <i class="fas fa-shield-halved"></i> 100% Private • Processed locally in browser
+                </div>
+            </div>
+
+            <!-- Top AdSense Banner -->
+            <div class="ad-section">
+                <!-- ADSENSE_TOP -->
+                <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-xxxxxxxxxx" crossorigin="anonymous"></script>
+                <ins class="adsbygoogle"
+                    style="display:block"
+                    data-ad-client="ca-pub-xxxxxxxxxx"
+                    data-ad-slot="1234567890"
+                    data-ad-format="auto"
+                    data-full-width-responsive="true"></ins>
+                <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+            </div>
+
+            <!-- Interactive Cropper Studio (hidden by default) -->
+            <div id="cropperUI" style="display: none;" class="mb-5">
+                <div class="cropper-stage-card">
+                    <!-- Studio Toolbar -->
+                    <div class="cropper-toolbar">
+                        <div class="d-flex align-items-center gap-2">
+                            <span class="fw-bold small text-secondary me-2"><i class="fas fa-sliders text-primary me-1"></i> Aspect Ratio:</span>
+                            <div class="aspect-ratio-group">
+                                <button type="button" class="aspect-ratio-btn active" data-ratio="NaN">Freeform</button>
+                                <button type="button" class="aspect-ratio-btn" data-ratio="1">1:1 Square</button>
+                                <button type="button" class="aspect-ratio-btn" data-ratio="1.3333333333333333">4:3 Standard</button>
+                                <button type="button" class="aspect-ratio-btn" data-ratio="1.7777777777777777">16:9 Wide</button>
+                            </div>
+                        </div>
+
+                        <div class="d-flex gap-2">
+                            <button type="button" class="btn btn-secondary-action" id="resetBtn">
+                                <i class="fas fa-rotate-left"></i> Change Image
+                            </button>
+                            <button type="button" class="btn btn-primary-action" id="cropBtn">
+                                <i class="fas fa-crop-simple"></i> Crop Image
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Cropper Canvas Viewport -->
+                    <div class="cropper-viewport">
+                        <img id="imageToCrop" src="" alt="Crop Source Image">
+                    </div>
+                </div>
+            </div>
+
+            <!-- Preview & Download Section (hidden by default) -->
+            <div id="previewSection" style="display: none;" class="mb-5">
+                <div class="row justify-content-center">
+                    <div class="col-lg-8">
+                        <div class="preview-card">
+                            <div class="preview-card-header">
+                                <h4><i class="fas fa-circle-check text-success"></i> Cropped Result</h4>
+                                <div class="d-flex gap-2">
+                                    <span class="stat-pill success">
+                                        <i class="fas fa-ruler-combined"></i> <span id="croppedDimensions">0 × 0 px</span>
+                                    </span>
+                                    <span class="stat-pill">
+                                        <i class="fas fa-weight-hanging"></i> <span id="croppedSize">0 KB</span>
+                                    </span>
+                                </div>
+                            </div>
+                            <div class="preview-img-container">
+                                <img id="croppedPreview" src="" alt="Cropped Result Preview">
+                            </div>
+                            <div class="preview-meta-footer justify-content-between">
+                                <span class="stat-pill">
+                                    <i class="fas fa-file-image text-primary"></i> <span id="fileName">cropped.jpg</span>
+                                </span>
+                                <a class="btn btn-download-action" id="downloadBtn" href="#" role="button">
+                                    <i class="fas fa-download"></i> Download Cropped Image
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Features Info Grid -->
+            <div class="features-section rounded-4 mt-5">
+                <div class="container p-0">
+                    <div class="section-header mb-4">
+                        <span class="section-tag">Crop Advantages</span>
+                        <h2>Pixel-Perfect Framing for Any Screen</h2>
+                    </div>
+                    <div class="row g-4">
+                        <div class="col-md-4">
+                            <div class="feature-box">
+                                <div class="feature-icon-wrapper">
+                                    <i class="fas fa-table-cells"></i>
+                                </div>
+                                <h3>Popular Presets</h3>
+                                <p>Quickly match standard social media formats including 1:1 Instagram posts, 16:9 YouTube covers, and 4:3 portfolios.</p>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="feature-box">
+                                <div class="feature-icon-wrapper">
+                                    <i class="fas fa-maximize"></i>
+                                </div>
+                                <h3>Zero Quality Loss</h3>
+                                <p>Cropping removes pixels without degrading or recompressing the remaining area, maintaining pristine sharpness.</p>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="feature-box">
+                                <div class="feature-icon-wrapper">
+                                    <i class="fas fa-shield-halved"></i>
+                                </div>
+                                <h3>Strict Privacy</h3>
+                                <p>Cropping is calculated natively on your GPU and browser. Zero bytes are uploaded to remote servers.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </main>
+
+    <!-- Bottom AdSense Banner -->
+    <div class="container">
+        <div class="ad-section">
+            <!-- ADSENSE_BOTTOM -->
+            <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-xxxxxxxxxx" crossorigin="anonymous"></script>
+            <ins class="adsbygoogle"
+                style="display:block"
+                data-ad-client="ca-pub-xxxxxxxxxx"
+                data-ad-slot="3456789012"
+                data-ad-format="auto"
+                data-full-width-responsive="true"></ins>
+            <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="row g-4">
+                <div class="col-lg-4">
+                    <a class="navbar-brand text-white mb-3" href="index.html">
+                        <span class="brand-icon"><i class="fas fa-layer-group"></i></span>
+                        <span class="text-white">Image<span class="text-gradient">Tools</span></span>
+                    </a>
+                    <p class="text-secondary small mt-2 pe-lg-4">
+                        Free, private, high-performance image processing right inside your web browser. No registration, no watermarks, no server uploads.
+                    </p>
+                    <div class="d-flex align-items-center mt-3">
+                        <a href="#" class="footer-social-link" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#" class="footer-social-link" aria-label="Twitter"><i class="fab fa-twitter"></i></a>
+                        <a href="#" class="footer-social-link" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+                        <a href="#" class="footer-social-link" aria-label="GitHub"><i class="fab fa-github"></i></a>
+                    </div>
+                </div>
+                <div class="col-6 col-lg-2">
+                    <h5>Tools</h5>
+                    <ul class="footer-links">
+                        <li><a href="compress.html">Image Compressor</a></li>
+                        <li><a href="resizer.html">Image Resizer</a></li>
+                        <li><a href="my_converter.html">Image Converter</a></li>
+                        <li><a href="my_crop.html">Image Cropper</a></li>
+                        <li><a href="image_pdf.html">Images to PDF</a></li>
+                    </ul>
+                </div>
+                <div class="col-6 col-lg-2">
+                    <h5>Company</h5>
+                    <ul class="footer-links">
+                        <li><a href="about.html">About Us</a></li>
+                        <li><a href="contact.html">Contact Support</a></li>
+                        <li><a href="privacy.html">Privacy Policy</a></li>
+                    </ul>
+                </div>
+                <div class="col-lg-4">
+                    <h5>Security & Compliance</h5>
+                    <p class="small text-secondary mb-3">
+                        <i class="fas fa-shield-halved text-success me-1"></i> Client-Side Sandbox: Your pictures are rendered directly into HTML5 memory buffers and never written to our disks.
+                    </p>
+                    <div class="stat-pill success">
+                        <i class="fas fa-check-circle"></i> 100% GDPR & Privacy Friendly
+                    </div>
+                </div>
+            </div>
+
+            <div class="footer-bottom">
+                <p class="mb-0">&copy; 2025 ImageTools. All rights reserved.</p>
+                <p class="mb-0">Designed for creators, designers, and developers.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Back to Top Button -->
+    <button class="back-to-top-btn" id="backToTopBtn" aria-label="Back to top">
+        <i class="fas fa-arrow-up"></i>
+    </button>
+
+    <!-- Bootstrap Bundle JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Cropper JS -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.12/cropper.min.js"></script>
+    <!-- ImageTools Core App JS -->
+    <script src="assets/js/app.js"></script>
+
+    <!-- Cropper Logic (Exact feature preservation) -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const uploadContainer = document.getElementById('uploadContainer');
+            const fileInput = document.getElementById('fileInput');
+            const cropperUI = document.getElementById('cropperUI');
+            const imageToCrop = document.getElementById('imageToCrop');
+            const previewSection = document.getElementById('previewSection');
+            const croppedPreview = document.getElementById('croppedPreview');
+            const fileNameSpan = document.getElementById('fileName');
+            const croppedDimensionsSpan = document.getElementById('croppedDimensions');
+            const croppedSizeSpan = document.getElementById('croppedSize');
+            const aspectRatioButtons = document.querySelectorAll('.aspect-ratio-btn');
+            const cropBtn = document.getElementById('cropBtn');
+            const downloadBtn = document.getElementById('downloadBtn');
+            const resetBtn = document.getElementById('resetBtn');
+
+            let cropperInstance;
+            let originalFileName = '';
+            let croppedBlob = null;
+            let originalFileType = '';
+
+            // Handle file upload click
+            uploadContainer.addEventListener('click', () => fileInput.click());
+
+            // Handle drag and drop
+            uploadContainer.addEventListener('dragover', (e) => {
+                e.preventDefault();
+                uploadContainer.classList.add('drag-over');
+            });
+
+            uploadContainer.addEventListener('dragleave', () => {
+                uploadContainer.classList.remove('drag-over');
+            });
+
+            uploadContainer.addEventListener('drop', (e) => {
+                e.preventDefault();
+                uploadContainer.classList.remove('drag-over');
+                if (e.dataTransfer.files.length) {
+                    handleFileSelection(e.dataTransfer.files[0]);
+                }
+            });
+
+            // Handle file selection
+            fileInput.addEventListener('change', (e) => {
+                if (e.target.files.length) {
+                    handleFileSelection(e.target.files[0]);
+                }
+            });
+
+            function handleFileSelection(file) {
+                if (!file.type.startsWith('image/')) {
+                    alert('Please select an image file.');
+                    return;
+                }
+
+                if (file.size > 20 * 1024 * 1024) {
+                    alert('File size should be less than 20MB.');
+                    return;
+                }
+                
+                originalFileName = file.name.split('.').slice(0, -1).join('.');
+                originalFileType = file.type;
+
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    if (cropperInstance) {
+                        cropperInstance.destroy();
+                    }
+                    imageToCrop.src = e.target.result;
+
+                    uploadContainer.style.display = 'none';
+                    cropperUI.style.display = 'block';
+                    previewSection.style.display = 'none';
+                    cropBtn.disabled = false;
+                    downloadBtn.classList.add('disabled');
+
+                    cropperInstance = new Cropper(imageToCrop, {
+                        aspectRatio: NaN,
+                        viewMode: 1,
+                        autoCropArea: 0.8,
+                    });
+
+                    cropperUI.scrollIntoView({ behavior: 'smooth' });
+                };
+                reader.readAsDataURL(file);
+            }
+
+            // Aspect ratio buttons
+            aspectRatioButtons.forEach(btn => {
+                btn.addEventListener('click', () => {
+                    const ratio = parseFloat(btn.dataset.ratio);
+                    if (cropperInstance) {
+                        cropperInstance.setAspectRatio(ratio);
+                    }
+                    
+                    aspectRatioButtons.forEach(b => b.classList.remove('active'));
+                    btn.classList.add('active');
+                });
+            });
+
+            // Crop image
+            cropBtn.addEventListener('click', () => {
+                if (!cropperInstance) return;
+
+                const croppedCanvas = cropperInstance.getCroppedCanvas();
+                const croppedDataUrl = croppedCanvas.toDataURL(originalFileType);
+
+                croppedPreview.src = croppedDataUrl;
+                
+                cropperUI.style.display = 'none';
+                previewSection.style.display = 'block';
+                downloadBtn.classList.remove('disabled');
+
+                // Get cropped blob for file size calculation and download
+                croppedCanvas.toBlob((blob) => {
+                    if (blob) {
+                        croppedBlob = blob;
+                        croppedSizeSpan.textContent = formatFileSize(blob.size);
+                        downloadBtn.href = URL.createObjectURL(blob);
+                        downloadBtn.download = `${originalFileName}-cropped.${originalFileType.split('/')[1]}`;
+                    }
+                }, originalFileType);
+
+                croppedDimensionsSpan.textContent = `${croppedCanvas.width} × ${croppedCanvas.height} px`;
+                fileNameSpan.textContent = `${originalFileName}-cropped.${originalFileType.split('/')[1]}`;
+                
+                previewSection.scrollIntoView({ behavior: 'smooth' });
+            });
+            
+            // Reset functionality
+            resetBtn.addEventListener('click', () => {
+                if (cropperInstance) {
+                    cropperInstance.destroy();
+                    cropperInstance = null;
+                }
+                uploadContainer.style.display = 'block';
+                cropperUI.style.display = 'none';
+                previewSection.style.display = 'none';
+                fileInput.value = ''; // Clear file input
+                
+                // Clear state variables
+                originalFileName = '';
+                croppedBlob = null;
+                originalFileType = '';
+                
+                // Reset aspect ratio buttons
+                aspectRatioButtons.forEach(b => b.classList.remove('active'));
+                aspectRatioButtons[0].classList.add('active');
+            });
+
+            // Format file size utility
+            function formatFileSize(bytes) {
+                if (bytes === 0) return '0 Bytes';
+                const k = 1024;
+                const sizes = ['Bytes', 'KB', 'MB'];
+                const i = Math.floor(Math.log(bytes) / Math.log(k));
+                return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
+            }
+        });
+    </script>
+</body>
+</html>

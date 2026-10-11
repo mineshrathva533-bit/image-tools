@@ -1,0 +1,476 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Free Online Image Converter – Convert JPG, PNG, WEBP, and GIF</title>
+    <meta name="description" content="Convert images between JPG, PNG, WEBP, and GIF instantly in your browser. Fast, free, secure format conversion with lossless quality preservation.">
+    <meta name="keywords" content="image converter, convert jpg to png, convert png to webp, convert image format, free online photo converter">
+
+    <!-- Bootstrap 5.3 -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome 6 -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- ImageTools Design System -->
+    <link rel="stylesheet" href="assets/css/main.css">
+
+    <style>
+        .format-badge-pill {
+            padding: 0.4rem 0.8rem;
+            border-radius: var(--radius-sm);
+            background: var(--bg-surface-subtle);
+            border: 1px solid var(--border-color);
+            font-size: 0.82rem;
+            font-weight: 700;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.4rem;
+        }
+
+        .format-badge-pill.active {
+            background: var(--brand-gradient);
+            color: #ffffff;
+            border-color: transparent;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Header Navigation -->
+    <header class="sticky-top">
+        <nav class="navbar navbar-expand-lg">
+            <div class="container">
+                <a class="navbar-brand" href="index.html">
+                    <span class="brand-icon"><i class="fas fa-layer-group"></i></span>
+                    <span>Image<span class="text-gradient">Tools</span></span>
+                </a>
+                <button class="navbar-toggler border-0 shadow-none" type="button" data-bs-toggle="collapse" data-bs-target="#mainNav" aria-controls="mainNav" aria-expanded="false" aria-label="Toggle navigation">
+                    <i class="fas fa-bars text-secondary fs-4"></i>
+                </button>
+                <div class="collapse navbar-collapse" id="mainNav">
+                    <ul class="navbar-nav mx-auto gap-lg-1">
+                        <li class="nav-item">
+                            <a class="nav-link" href="index.html">Home</a>
+                        </li>
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle active" href="#" id="toolsDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                All Tools
+                            </a>
+                            <ul class="dropdown-menu" aria-labelledby="toolsDropdown">
+                                <li><a class="dropdown-item" href="compress.html"><i class="fas fa-compress-alt"></i> Image Compressor</a></li>
+                                <li><a class="dropdown-item" href="resizer.html"><i class="fas fa-expand-arrows-alt"></i> Image Resizer</a></li>
+                                <li><a class="dropdown-item active" href="my_converter.html"><i class="fas fa-exchange-alt"></i> Image Converter</a></li>
+                                <li><a class="dropdown-item" href="my_crop.html"><i class="fas fa-crop-alt"></i> Image Cropper</a></li>
+                                <li><a class="dropdown-item" href="image_pdf.html"><i class="fas fa-file-pdf"></i> Images to PDF</a></li>
+                            </ul>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="about.html">About</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="contact.html">Contact</a>
+                        </li>
+                    </ul>
+                    <div class="d-flex align-items-center gap-2 mt-3 mt-lg-0">
+                        <button class="theme-toggle-btn" aria-label="Toggle theme" title="Toggle dark/light mode">
+                            <i class="fas fa-moon"></i>
+                        </button>
+                        <a href="index.html#tools" class="btn btn-nav-action">
+                            <i class="fas fa-bolt me-1"></i> More Tools
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <!-- Tool Workspace -->
+    <main class="tool-workspace">
+        <div class="container">
+            <div class="tool-workspace-header">
+                <span class="section-tag mb-2 d-inline-block">Universal Converter</span>
+                <h1>Image <span class="text-gradient">Converter</span></h1>
+                <p>Convert your photos between modern web formats in seconds. Zero uploads, no quality compression, and 100% private in-browser rendering.</p>
+            </div>
+
+            <!-- Upload Area -->
+            <div class="upload-container" id="uploadContainer">
+                <input type="file" id="fileInput" accept="image/jpeg,image/png,image/webp,image/gif" class="d-none">
+                <div class="upload-icon-wrapper">
+                    <i class="fas fa-exchange-alt"></i>
+                </div>
+                <div class="upload-title">Drop your image to convert, or browse</div>
+                <div class="upload-subtitle">Supports JPG, PNG, WEBP, and GIF formats up to 20MB</div>
+                <div class="upload-pills">
+                    <span class="upload-pill">JPG → PNG</span>
+                    <span class="upload-pill">PNG → WEBP</span>
+                    <span class="upload-pill">WEBP → JPG</span>
+                    <span class="upload-pill">GIF → PNG</span>
+                </div>
+                <div class="upload-privacy-tag">
+                    <i class="fas fa-shield-halved"></i> 100% Private • Processed locally in browser
+                </div>
+            </div>
+
+            <!-- Top AdSense Banner -->
+            <div class="ad-section">
+                <!-- ADSENSE_TOP -->
+                <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-xxxxxxxxxx" crossorigin="anonymous"></script>
+                <ins class="adsbygoogle"
+                    style="display:block"
+                    data-ad-client="ca-pub-xxxxxxxxxx"
+                    data-ad-slot="1234567890"
+                    data-ad-format="auto"
+                    data-full-width-responsive="true"></ins>
+                <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+            </div>
+
+            <!-- Converter Controls (hidden by default) -->
+            <div id="converterControls" class="controls-card" style="display: none;">
+                <div class="controls-card-title">
+                    <i class="fas fa-arrow-right-arrow-left"></i>
+                    <span>Target Format Selection</span>
+                    <span class="ms-auto stat-pill">
+                        <i class="fas fa-file-image text-primary"></i> <span id="fileName">image.png</span>
+                    </span>
+                </div>
+
+                <div class="row g-4 align-items-center">
+                    <div class="col-md-7">
+                        <label for="formatSelect" class="form-label">Choose Destination Format</label>
+                        <select class="form-select form-select-lg" id="formatSelect">
+                            <option value="" selected>Choose target format...</option>
+                            <option value="png">PNG (Portable Network Graphics - Lossless & Transparent)</option>
+                            <option value="jpg">JPG (JPEG - Universal & Compact Photography)</option>
+                            <option value="webp">WEBP (Modern Web Standard - High Efficiency)</option>
+                        </select>
+                    </div>
+
+                    <div class="col-md-5 d-flex align-items-end">
+                        <button class="btn btn-primary-action w-100 py-3" id="convertBtn" disabled>
+                            <i class="fas fa-exchange-alt"></i> Convert Image
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Preview Section (hidden by default) -->
+            <div id="previewSection" style="display: none;" class="mb-5">
+                <div class="row g-4">
+                    <!-- Original Image Card -->
+                    <div class="col-md-6">
+                        <div class="preview-card">
+                            <div class="preview-card-header">
+                                <h4><i class="fas fa-image text-secondary"></i> Original Image</h4>
+                                <div class="d-flex gap-2">
+                                    <span class="stat-pill">
+                                        <span id="originalInfo">Original info</span>
+                                    </span>
+                                    <span class="stat-pill">
+                                        <i class="fas fa-weight-hanging"></i> <span id="originalSize">0 KB</span>
+                                    </span>
+                                </div>
+                            </div>
+                            <div class="preview-img-container">
+                                <img id="originalPreview" src="" alt="Original Preview">
+                            </div>
+                            <div class="preview-meta-footer">
+                                <span class="text-muted small">Input format</span>
+                                <span class="badge bg-secondary-subtle text-secondary">Source File</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Converted Image Card -->
+                    <div class="col-md-6">
+                        <div class="preview-card">
+                            <div class="preview-card-header">
+                                <h4><i class="fas fa-check-circle text-success"></i> Converted Image</h4>
+                                <div class="d-flex gap-2">
+                                    <span class="stat-pill success">
+                                        <span id="convertedInfo">Target info</span>
+                                    </span>
+                                    <span class="stat-pill">
+                                        <i class="fas fa-weight-hanging"></i> <span id="convertedSize">N/A</span>
+                                    </span>
+                                </div>
+                            </div>
+                            <div class="preview-img-container">
+                                <img id="convertedPreview" src="" alt="Converted Preview">
+                            </div>
+                            <div class="preview-meta-footer justify-content-between">
+                                <span class="text-success small fw-bold">
+                                    <i class="fas fa-circle-check"></i> Conversion complete
+                                </span>
+                                <a class="btn btn-download-action" id="downloadBtn" href="#" role="button">
+                                    <i class="fas fa-download"></i> Download Converted Image
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Format Comparison Cards -->
+            <div class="features-section rounded-4 mt-5">
+                <div class="container p-0">
+                    <div class="section-header mb-4">
+                        <span class="section-tag">Format Guide</span>
+                        <h2>Which Format Should You Choose?</h2>
+                    </div>
+                    <div class="row g-4">
+                        <div class="col-md-4">
+                            <div class="feature-box">
+                                <div class="feature-icon-wrapper">
+                                    <i class="fas fa-file-image"></i>
+                                </div>
+                                <h3>PNG Format</h3>
+                                <p>Best for logos, illustrations, screenshots, and icons requiring sharp edges and alpha transparency channels.</p>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="feature-box">
+                                <div class="feature-icon-wrapper">
+                                    <i class="fas fa-camera"></i>
+                                </div>
+                                <h3>JPG / JPEG</h3>
+                                <p>Standard for photographs and complex real-world scenes with rich gradients. Exceptional compatibility on every device.</p>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="feature-box">
+                                <div class="feature-icon-wrapper">
+                                    <i class="fas fa-bolt"></i>
+                                </div>
+                                <h3>WEBP Format</h3>
+                                <p>Google's ultra-efficient web format offering up to 30% smaller size than JPG with identical visual quality and transparency.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </main>
+
+    <!-- Bottom AdSense Banner -->
+    <div class="container">
+        <div class="ad-section">
+            <!-- ADSENSE_BOTTOM -->
+            <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-xxxxxxxxxx" crossorigin="anonymous"></script>
+            <ins class="adsbygoogle"
+                style="display:block"
+                data-ad-client="ca-pub-xxxxxxxxxx"
+                data-ad-slot="3456789012"
+                data-ad-format="auto"
+                data-full-width-responsive="true"></ins>
+            <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="row g-4">
+                <div class="col-lg-4">
+                    <a class="navbar-brand text-white mb-3" href="index.html">
+                        <span class="brand-icon"><i class="fas fa-layer-group"></i></span>
+                        <span class="text-white">Image<span class="text-gradient">Tools</span></span>
+                    </a>
+                    <p class="text-secondary small mt-2 pe-lg-4">
+                        Free, private, high-performance image processing right inside your web browser. No registration, no watermarks, no server uploads.
+                    </p>
+                    <div class="d-flex align-items-center mt-3">
+                        <a href="#" class="footer-social-link" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#" class="footer-social-link" aria-label="Twitter"><i class="fab fa-twitter"></i></a>
+                        <a href="#" class="footer-social-link" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+                        <a href="#" class="footer-social-link" aria-label="GitHub"><i class="fab fa-github"></i></a>
+                    </div>
+                </div>
+                <div class="col-6 col-lg-2">
+                    <h5>Tools</h5>
+                    <ul class="footer-links">
+                        <li><a href="compress.html">Image Compressor</a></li>
+                        <li><a href="resizer.html">Image Resizer</a></li>
+                        <li><a href="my_converter.html">Image Converter</a></li>
+                        <li><a href="my_crop.html">Image Cropper</a></li>
+                        <li><a href="image_pdf.html">Images to PDF</a></li>
+                    </ul>
+                </div>
+                <div class="col-6 col-lg-2">
+                    <h5>Company</h5>
+                    <ul class="footer-links">
+                        <li><a href="about.html">About Us</a></li>
+                        <li><a href="contact.html">Contact Support</a></li>
+                        <li><a href="privacy.html">Privacy Policy</a></li>
+                    </ul>
+                </div>
+                <div class="col-lg-4">
+                    <h5>Security & Compliance</h5>
+                    <p class="small text-secondary mb-3">
+                        <i class="fas fa-shield-halved text-success me-1"></i> Client-Side Sandbox: Your pictures are rendered directly into HTML5 memory buffers and never written to our disks.
+                    </p>
+                    <div class="stat-pill success">
+                        <i class="fas fa-check-circle"></i> 100% GDPR & Privacy Friendly
+                    </div>
+                </div>
+            </div>
+
+            <div class="footer-bottom">
+                <p class="mb-0">&copy; 2025 ImageTools. All rights reserved.</p>
+                <p class="mb-0">Designed for creators, designers, and developers.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Back to Top Button -->
+    <button class="back-to-top-btn" id="backToTopBtn" aria-label="Back to top">
+        <i class="fas fa-arrow-up"></i>
+    </button>
+
+    <!-- Bootstrap Bundle JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- ImageTools Core App JS -->
+    <script src="assets/js/app.js"></script>
+
+    <!-- Converter Core JavaScript (Exact feature preservation) -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const uploadContainer = document.getElementById('uploadContainer');
+            const fileInput = document.getElementById('fileInput');
+            const converterControls = document.getElementById('converterControls');
+            const previewSection = document.getElementById('previewSection');
+            const originalPreview = document.getElementById('originalPreview');
+            const convertedPreview = document.getElementById('convertedPreview');
+            const originalInfo = document.getElementById('originalInfo');
+            const convertedInfo = document.getElementById('convertedInfo');
+            const fileNameSpan = document.getElementById('fileName');
+            const originalSizeSpan = document.getElementById('originalSize');
+            const convertedSizeSpan = document.getElementById('convertedSize');
+            const formatSelect = document.getElementById('formatSelect');
+            const convertBtn = document.getElementById('convertBtn');
+            const downloadBtn = document.getElementById('downloadBtn');
+
+            let originalImage = null;
+            let originalFile = null;
+            let convertedBlob = null;
+
+            // Handle file upload click
+            uploadContainer.addEventListener('click', () => fileInput.click());
+
+            // Handle drag and drop
+            uploadContainer.addEventListener('dragover', (e) => {
+                e.preventDefault();
+                uploadContainer.classList.add('drag-over');
+            });
+
+            uploadContainer.addEventListener('dragleave', () => {
+                uploadContainer.classList.remove('drag-over');
+            });
+
+            uploadContainer.addEventListener('drop', (e) => {
+                e.preventDefault();
+                uploadContainer.classList.remove('drag-over');
+                if (e.dataTransfer.files.length) {
+                    handleFileSelection(e.dataTransfer.files[0]);
+                }
+            });
+
+            // Handle file selection
+            fileInput.addEventListener('change', (e) => {
+                if (e.target.files.length) {
+                    handleFileSelection(e.target.files[0]);
+                }
+            });
+
+            function handleFileSelection(file) {
+                if (!file.type.match('image/jpeg|image/png|image/webp|image/gif')) {
+                    alert('Please select a JPG, PNG, WEBP, or GIF image.');
+                    return;
+                }
+                originalFile = file;
+
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    originalImage = new Image();
+                    originalImage.onload = function() {
+                        originalPreview.src = e.target.result;
+                        convertedPreview.src = '';
+                        convertedInfo.textContent = 'Select format and convert';
+
+                        const fileExtension = originalFile.name.split('.').pop().toUpperCase();
+                        originalInfo.textContent = `${this.width} × ${this.height} px | ${fileExtension}`;
+                        fileNameSpan.textContent = originalFile.name;
+                        originalSizeSpan.textContent = formatFileSize(originalFile.size);
+                        convertedSizeSpan.textContent = 'N/A';
+
+                        converterControls.style.display = 'block';
+                        previewSection.style.display = 'block';
+                        downloadBtn.classList.add('disabled');
+                        formatSelect.value = '';
+                        convertBtn.disabled = true;
+
+                        converterControls.scrollIntoView({ behavior: 'smooth' });
+                    };
+                    originalImage.src = e.target.result;
+                };
+                reader.readAsDataURL(file);
+            }
+
+            // Enable convert button when format is selected
+            formatSelect.addEventListener('change', function() {
+                convertBtn.disabled = !this.value || !originalImage;
+            });
+
+            // Convert and update preview
+            convertBtn.addEventListener('click', async () => {
+                const outputFormat = formatSelect.value;
+                if (!outputFormat || !originalImage) {
+                    alert('Please select a format and an image.');
+                    return;
+                }
+
+                convertBtn.disabled = true;
+                convertBtn.innerHTML = '<i class="fas fa-spinner fa-spin me-2"></i> Converting...';
+                downloadBtn.classList.add('disabled');
+
+                const canvas = document.createElement('canvas');
+                canvas.width = originalImage.width;
+                canvas.height = originalImage.height;
+                const ctx = canvas.getContext('2d');
+                ctx.drawImage(originalImage, 0, 0);
+
+                const mimeType = `image/${outputFormat === 'jpg' ? 'jpeg' : outputFormat}`;
+                
+                try {
+                    convertedBlob = await new Promise(resolve => canvas.toBlob(resolve, mimeType, 0.92));
+                    const convertedDataUrl = URL.createObjectURL(convertedBlob);
+                    
+                    convertedPreview.src = convertedDataUrl;
+                    convertedInfo.textContent = `${originalImage.width} × ${originalImage.height} px | ${outputFormat.toUpperCase()}`;
+                    convertedSizeSpan.textContent = formatFileSize(convertedBlob.size);
+                    
+                    downloadBtn.classList.remove('disabled');
+                    downloadBtn.href = convertedDataUrl;
+                    downloadBtn.setAttribute('download', `converted_image.${outputFormat}`);
+                } catch (error) {
+                    console.error('Conversion error:', error);
+                    alert('An error occurred during conversion. Please try again.');
+                } finally {
+                    convertBtn.disabled = false;
+                    convertBtn.innerHTML = '<i class="fas fa-exchange-alt me-2"></i> Convert Image';
+                }
+            });
+
+            // Format file size utility
+            function formatFileSize(bytes) {
+                if (bytes === 0) return '0 Bytes';
+                const k = 1024;
+                const sizes = ['Bytes', 'KB', 'MB'];
+                const i = Math.floor(Math.log(bytes) / Math.log(k));
+                return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
+            }
+        });
+    </script>
+</body>
+</html>

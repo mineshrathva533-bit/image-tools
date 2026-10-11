@@ -1,0 +1,504 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Free Online Image to PDF Converter – Merge Photos into a Document</title>
+    <meta name="description" content="Convert one or multiple JPG, PNG, and WEBP images into a clean multi-page PDF document. Rearrange pages with drag-and-drop. Free and 100% private.">
+    <meta name="keywords" content="image to pdf, convert jpg to pdf, merge images into pdf, free pdf creator, photos to pdf document">
+
+    <!-- Bootstrap 5.3 -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome 6 -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- ImageTools Design System -->
+    <link rel="stylesheet" href="assets/css/main.css">
+</head>
+<body>
+
+    <!-- Header Navigation -->
+    <header class="sticky-top">
+        <nav class="navbar navbar-expand-lg">
+            <div class="container">
+                <a class="navbar-brand" href="index.html">
+                    <span class="brand-icon"><i class="fas fa-layer-group"></i></span>
+                    <span>Image<span class="text-gradient">Tools</span></span>
+                </a>
+                <button class="navbar-toggler border-0 shadow-none" type="button" data-bs-toggle="collapse" data-bs-target="#mainNav" aria-controls="mainNav" aria-expanded="false" aria-label="Toggle navigation">
+                    <i class="fas fa-bars text-secondary fs-4"></i>
+                </button>
+                <div class="collapse navbar-collapse" id="mainNav">
+                    <ul class="navbar-nav mx-auto gap-lg-1">
+                        <li class="nav-item">
+                            <a class="nav-link" href="index.html">Home</a>
+                        </li>
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle active" href="#" id="toolsDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                All Tools
+                            </a>
+                            <ul class="dropdown-menu" aria-labelledby="toolsDropdown">
+                                <li><a class="dropdown-item" href="compress.html"><i class="fas fa-compress-alt"></i> Image Compressor</a></li>
+                                <li><a class="dropdown-item" href="resizer.html"><i class="fas fa-expand-arrows-alt"></i> Image Resizer</a></li>
+                                <li><a class="dropdown-item" href="my_converter.html"><i class="fas fa-exchange-alt"></i> Image Converter</a></li>
+                                <li><a class="dropdown-item" href="my_crop.html"><i class="fas fa-crop-alt"></i> Image Cropper</a></li>
+                                <li><a class="dropdown-item active" href="image_pdf.html"><i class="fas fa-file-pdf"></i> Images to PDF</a></li>
+                            </ul>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="about.html">About</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="contact.html">Contact</a>
+                        </li>
+                    </ul>
+                    <div class="d-flex align-items-center gap-2 mt-3 mt-lg-0">
+                        <button class="theme-toggle-btn" aria-label="Toggle theme" title="Toggle dark/light mode">
+                            <i class="fas fa-moon"></i>
+                        </button>
+                        <a href="index.html#tools" class="btn btn-nav-action">
+                            <i class="fas fa-bolt me-1"></i> More Tools
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <!-- Tool Workspace -->
+    <main class="tool-workspace">
+        <div class="container">
+            <div class="tool-workspace-header">
+                <span class="section-tag mb-2 d-inline-block">Document Publisher</span>
+                <h1>Images to <span class="text-gradient">PDF</span></h1>
+                <p>Combine multiple pictures into an organized, high-resolution PDF document. Reorder pages freely and customize page layout.</p>
+            </div>
+
+            <!-- Upload Area -->
+            <div class="upload-container" id="uploadContainer">
+                <input type="file" id="fileInput" accept="image/jpeg,image/png,image/webp,image/gif" multiple class="d-none">
+                <div class="upload-icon-wrapper">
+                    <i class="fas fa-file-circle-plus"></i>
+                </div>
+                <div class="upload-title">Drop your images here, or browse files</div>
+                <div class="upload-subtitle">Select multiple images to combine into a single PDF</div>
+                <div class="upload-pills">
+                    <span class="upload-pill">MULTIPLE FILES</span>
+                    <span class="upload-pill">DRAG & REORDER</span>
+                    <span class="upload-pill">A4 / LETTER / FIT</span>
+                    <span class="upload-pill">CLIENT-SIDE</span>
+                </div>
+                <div class="upload-privacy-tag">
+                    <i class="fas fa-shield-halved"></i> 100% Private • Processed locally in browser
+                </div>
+            </div>
+
+            <!-- Top AdSense Banner -->
+            <div class="ad-section">
+                <!-- ADSENSE_TOP -->
+                <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-xxxxxxxxxx" crossorigin="anonymous"></script>
+                <ins class="adsbygoogle"
+                    style="display:block"
+                    data-ad-client="ca-pub-xxxxxxxxxx"
+                    data-ad-slot="1234567890"
+                    data-ad-format="auto"
+                    data-full-width-responsive="true"></ins>
+                <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+            </div>
+
+            <!-- Page Reordering Gallery -->
+            <div class="mb-4">
+                <div class="d-flex justify-content-between align-items-center mb-2 px-1">
+                    <span class="fw-bold small text-secondary">
+                        <i class="fas fa-grip-vertical text-primary me-1"></i> Uploaded Images (Drag cards to reorder PDF pages)
+                    </span>
+                </div>
+                <div id="fileList">
+                    <p class="text-muted w-100 text-center py-4 mb-0">Your uploaded images will appear here...</p>
+                </div>
+            </div>
+
+            <!-- PDF Conversion Options (hidden by default) -->
+            <div id="toolOptions" class="controls-card" style="display: none;">
+                <div class="controls-card-title">
+                    <i class="fas fa-file-lines"></i>
+                    <span>PDF Page Configuration</span>
+                </div>
+
+                <div class="row g-4 align-items-center">
+                    <div class="col-md-4">
+                        <label for="pageSize" class="form-label">Page Size</label>
+                        <select class="form-select" id="pageSize">
+                            <option value="a4" selected>A4 (Standard 210 × 297 mm)</option>
+                            <option value="letter">US Letter (8.5 × 11 in)</option>
+                            <option value="Fit">Fit to Image Size</option>
+                        </select>
+                    </div>
+
+                    <div class="col-md-4">
+                        <label for="orientation" class="form-label">Page Orientation</label>
+                        <select class="form-select" id="orientation">
+                            <option value="portrait" selected>Portrait (Vertical)</option>
+                            <option value="landscape">Landscape (Horizontal)</option>
+                        </select>
+                    </div>
+
+                    <div class="col-md-4">
+                        <div class="d-flex justify-content-between align-items-center mb-2">
+                            <label for="qualitySlider" class="form-label mb-0">Render Quality</label>
+                            <span class="slider-value-badge" id="qualityValue">80%</span>
+                        </div>
+                        <input type="range" class="form-range" id="qualitySlider" min="0.1" max="1" step="0.1" value="0.8">
+                    </div>
+                </div>
+
+                <div class="d-flex flex-wrap justify-content-center gap-3 mt-4 pt-3 border-top border-subtle">
+                    <button class="btn btn-secondary-action" id="resetBtn">
+                        <i class="fas fa-trash-can"></i> Clear All Images
+                    </button>
+                    <button class="btn btn-primary-action px-5" id="convertBtn">
+                        <i class="fas fa-file-pdf"></i> Generate PDF Document
+                    </button>
+                    <a class="btn btn-download-action px-5" id="downloadBtn" href="#" role="button" style="display: none;">
+                        <i class="fas fa-download"></i> Download Completed PDF
+                    </a>
+                </div>
+            </div>
+
+            <!-- Features Information Grid -->
+            <div class="features-section rounded-4 mt-5">
+                <div class="container p-0">
+                    <div class="section-header mb-4">
+                        <span class="section-tag">PDF Highlights</span>
+                        <h2>Fast & Private Document Conversion</h2>
+                    </div>
+                    <div class="row g-4">
+                        <div class="col-md-4">
+                            <div class="feature-box">
+                                <div class="feature-icon-wrapper">
+                                    <i class="fas fa-layer-group"></i>
+                                </div>
+                                <h3>Batch Merging</h3>
+                                <p>Combine 5, 10, or dozens of photos, receipts, or presentation slides into one structured document.</p>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="feature-box">
+                                <div class="feature-icon-wrapper">
+                                    <i class="fas fa-arrows-up-down-left-right"></i>
+                                </div>
+                                <h3>Easy Page Reordering</h3>
+                                <p>Simply drag and drop thumbnail cards on screen to sort the pages exactly the way you want them to read.</p>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="feature-box">
+                                <div class="feature-icon-wrapper">
+                                    <i class="fas fa-shield-halved"></i>
+                                </div>
+                                <h3>100% Confidential</h3>
+                                <p>No sensitive documents, IDs, or receipts are ever uploaded to cloud servers. Built with pure browser jsPDF.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </main>
+
+    <!-- Bottom AdSense Banner -->
+    <div class="container">
+        <div class="ad-section">
+            <!-- ADSENSE_BOTTOM -->
+            <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-xxxxxxxxxx" crossorigin="anonymous"></script>
+            <ins class="adsbygoogle"
+                style="display:block"
+                data-ad-client="ca-pub-xxxxxxxxxx"
+                data-ad-slot="3456789012"
+                data-ad-format="auto"
+                data-full-width-responsive="true"></ins>
+            <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="row g-4">
+                <div class="col-lg-4">
+                    <a class="navbar-brand text-white mb-3" href="index.html">
+                        <span class="brand-icon"><i class="fas fa-layer-group"></i></span>
+                        <span class="text-white">Image<span class="text-gradient">Tools</span></span>
+                    </a>
+                    <p class="text-secondary small mt-2 pe-lg-4">
+                        Free, private, high-performance image processing right inside your web browser. No registration, no watermarks, no server uploads.
+                    </p>
+                    <div class="d-flex align-items-center mt-3">
+                        <a href="#" class="footer-social-link" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#" class="footer-social-link" aria-label="Twitter"><i class="fab fa-twitter"></i></a>
+                        <a href="#" class="footer-social-link" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+                        <a href="#" class="footer-social-link" aria-label="GitHub"><i class="fab fa-github"></i></a>
+                    </div>
+                </div>
+                <div class="col-6 col-lg-2">
+                    <h5>Tools</h5>
+                    <ul class="footer-links">
+                        <li><a href="compress.html">Image Compressor</a></li>
+                        <li><a href="resizer.html">Image Resizer</a></li>
+                        <li><a href="my_converter.html">Image Converter</a></li>
+                        <li><a href="my_crop.html">Image Cropper</a></li>
+                        <li><a href="image_pdf.html">Images to PDF</a></li>
+                    </ul>
+                </div>
+                <div class="col-6 col-lg-2">
+                    <h5>Company</h5>
+                    <ul class="footer-links">
+                        <li><a href="about.html">About Us</a></li>
+                        <li><a href="contact.html">Contact Support</a></li>
+                        <li><a href="privacy.html">Privacy Policy</a></li>
+                    </ul>
+                </div>
+                <div class="col-lg-4">
+                    <h5>Security & Compliance</h5>
+                    <p class="small text-secondary mb-3">
+                        <i class="fas fa-shield-halved text-success me-1"></i> Client-Side Sandbox: Your pictures are rendered directly into HTML5 memory buffers and never written to our disks.
+                    </p>
+                    <div class="stat-pill success">
+                        <i class="fas fa-check-circle"></i> 100% GDPR & Privacy Friendly
+                    </div>
+                </div>
+            </div>
+
+            <div class="footer-bottom">
+                <p class="mb-0">&copy; 2025 ImageTools. All rights reserved.</p>
+                <p class="mb-0">Designed for creators, designers, and developers.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Back to Top Button -->
+    <button class="back-to-top-btn" id="backToTopBtn" aria-label="Back to top">
+        <i class="fas fa-arrow-up"></i>
+    </button>
+
+    <!-- Bootstrap Bundle JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- ImageTools Core App JS -->
+    <script src="assets/js/app.js"></script>
+
+    <!-- jsPDF Loader Script -->
+    <script>
+        const jsPdfScript = document.createElement('script');
+        jsPdfScript.src = 'https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js';
+        jsPdfScript.onload = () => console.log('jsPDF loaded');
+        document.head.appendChild(jsPdfScript);
+    </script>
+
+    <!-- Image to PDF Logic (Exact feature preservation) -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const uploadContainer = document.getElementById('uploadContainer');
+            const fileInput = document.getElementById('fileInput');
+            const fileList = document.getElementById('fileList');
+            const toolOptions = document.getElementById('toolOptions');
+            const convertBtn = document.getElementById('convertBtn');
+            const resetBtn = document.getElementById('resetBtn');
+            const downloadBtn = document.getElementById('downloadBtn');
+            const pageSizeSelect = document.getElementById('pageSize');
+            const orientationSelect = document.getElementById('orientation');
+            const qualitySlider = document.getElementById('qualitySlider');
+            const qualityValue = document.getElementById('qualityValue');
+            
+            let files = [];
+
+            // Event Listeners for UI interaction
+            uploadContainer.addEventListener('click', () => fileInput.click());
+            uploadContainer.addEventListener('dragover', (e) => {
+                e.preventDefault();
+                uploadContainer.classList.add('drag-over');
+            });
+            uploadContainer.addEventListener('dragleave', () => {
+                uploadContainer.classList.remove('drag-over');
+            });
+            uploadContainer.addEventListener('drop', (e) => {
+                e.preventDefault();
+                uploadContainer.classList.remove('drag-over');
+                handleFiles(e.dataTransfer.files);
+            });
+            fileInput.addEventListener('change', (e) => {
+                handleFiles(e.target.files);
+            });
+            resetBtn.addEventListener('click', resetTool);
+            qualitySlider.addEventListener('input', () => {
+                qualityValue.textContent = Math.round(qualitySlider.value * 100) + '%';
+            });
+            convertBtn.addEventListener('click', convertToPdf);
+
+            // File handling and UI rendering
+            function handleFiles(newFiles) {
+                const acceptedTypes = ['image/jpeg', 'image/png', 'image/webp', 'image/gif'];
+                for (const file of newFiles) {
+                    if (acceptedTypes.includes(file.type)) {
+                        const reader = new FileReader();
+                        reader.onload = (e) => {
+                            const fileData = { file, url: e.target.result };
+                            files.push(fileData);
+                            renderFileList();
+                        };
+                        reader.readAsDataURL(file);
+                    } else {
+                        alert(`File type not supported: ${file.name}`);
+                    }
+                }
+            }
+
+            function renderFileList() {
+                if (files.length > 0) {
+                    fileList.innerHTML = '';
+                    toolOptions.style.display = 'block';
+                } else {
+                    fileList.innerHTML = '<p class="text-muted w-100 text-center py-4 mb-0">Your uploaded images will appear here...</p>';
+                    toolOptions.style.display = 'none';
+                    downloadBtn.style.display = 'none';
+                }
+
+                files.forEach((file, index) => {
+                    const item = document.createElement('div');
+                    item.className = 'file-item';
+                    item.setAttribute('draggable', true);
+                    item.dataset.index = index;
+                    item.innerHTML = `
+                        <img src="${file.url}" alt="${file.file.name}">
+                        <p title="${file.file.name}">${file.file.name}</p>
+                        <button class="remove-btn" data-index="${index}" aria-label="Remove image">&times;</button>
+                    `;
+                    fileList.appendChild(item);
+                });
+                setupDragAndDropSorting();
+            }
+
+            // Drag and Drop Sorting
+            function setupDragAndDropSorting() {
+                const listItems = fileList.querySelectorAll('.file-item');
+                let dragStartIndex;
+
+                listItems.forEach(item => {
+                    item.addEventListener('dragstart', (e) => {
+                        dragStartIndex = parseInt(item.dataset.index);
+                        e.dataTransfer.effectAllowed = 'move';
+                        e.dataTransfer.setData('text/plain', dragStartIndex);
+                        setTimeout(() => item.style.opacity = '0.5', 0);
+                    });
+                    item.addEventListener('dragend', (e) => {
+                        e.target.style.opacity = '1';
+                    });
+                    item.addEventListener('drop', handleDrop);
+                });
+                
+                fileList.addEventListener('dragover', (e) => e.preventDefault());
+            }
+
+            function handleDrop(e) {
+                e.preventDefault();
+                e.stopPropagation();
+                
+                const fromIndex = parseInt(e.dataTransfer.getData('text/plain'));
+                const toItem = e.target.closest('.file-item');
+                if (!toItem || fromIndex === parseInt(toItem.dataset.index)) return;
+
+                const toIndex = parseInt(toItem.dataset.index);
+                const [movedItem] = files.splice(fromIndex, 1);
+                files.splice(toIndex, 0, movedItem);
+                
+                renderFileList();
+            }
+
+            fileList.addEventListener('click', (e) => {
+                if (e.target.classList.contains('remove-btn')) {
+                    const index = parseInt(e.target.dataset.index);
+                    files.splice(index, 1);
+                    renderFileList();
+                }
+            });
+
+            // PDF Conversion Logic
+            async function convertToPdf() {
+                if (files.length === 0 || !window.jspdf) {
+                    alert('Please upload images and wait for the library to load.');
+                    return;
+                }
+                
+                convertBtn.disabled = true;
+                convertBtn.innerHTML = '<i class="fas fa-spinner fa-spin me-2"></i> Converting...';
+                
+                const doc = new window.jspdf.jsPDF({
+                    orientation: orientationSelect.value === 'landscape' ? 'landscape' : 'portrait',
+                    unit: 'mm',
+                    format: pageSizeSelect.value
+                });
+                
+                let firstPage = true;
+
+                for (const fileData of files) {
+                    if (!firstPage) {
+                        doc.addPage();
+                    }
+                    firstPage = false;
+                    
+                    const img = new Image();
+                    img.src = fileData.url;
+
+                    await new Promise((resolve) => {
+                        img.onload = () => {
+                            let docWidth = doc.internal.pageSize.getWidth();
+                            let docHeight = doc.internal.pageSize.getHeight();
+                            let imgWidth = img.width;
+                            let imgHeight = img.height;
+
+                            let newWidth, newHeight;
+                            if (pageSizeSelect.value === 'Fit') {
+                                const ratio = imgWidth / imgHeight;
+                                if (ratio > 1) { // Landscape image
+                                    doc.internal.pageSize.setWidth(297);
+                                    doc.internal.pageSize.setHeight(210);
+                                } else { // Portrait or square image
+                                    doc.internal.pageSize.setWidth(210);
+                                    doc.internal.pageSize.setHeight(297);
+                                }
+                                doc.addImage(img.src, 'JPEG', 0, 0, doc.internal.pageSize.getWidth(), doc.internal.pageSize.getHeight());
+                            } else {
+                                const ratio = Math.min(docWidth / imgWidth, docHeight / imgHeight);
+                                newWidth = imgWidth * ratio;
+                                newHeight = imgHeight * ratio;
+                                const x = (docWidth - newWidth) / 2;
+                                const y = (docHeight - newHeight) / 2;
+                                doc.addImage(img.src, 'JPEG', x, y, newWidth, newHeight);
+                            }
+                            resolve();
+                        };
+                    });
+                }
+                
+                const pdfBlob = doc.output('blob');
+                const pdfUrl = URL.createObjectURL(pdfBlob);
+                
+                downloadBtn.href = pdfUrl;
+                downloadBtn.download = 'ImageTools_PDF.pdf';
+                downloadBtn.style.display = 'inline-flex';
+                convertBtn.style.display = 'none';
+                
+                convertBtn.disabled = false;
+                convertBtn.innerHTML = '<i class="fas fa-file-pdf"></i> Generate PDF Document';
+            }
+
+            function resetTool() {
+                files = [];
+                fileInput.value = '';
+                renderFileList();
+                downloadBtn.style.display = 'none';
+                convertBtn.style.display = 'inline-flex';
+            }
+        });
+    </script>
+</body>
+</html>
